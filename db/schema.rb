@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_06_07_151039) do
+ActiveRecord::Schema[7.0].define(version: 2022_06_09_111417) do
   create_table "masterplan2ds", force: :cascade do |t|
     t.string "imageurl"
     t.string "name"
@@ -21,6 +21,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_07_151039) do
     t.string "name"
     t.json "phasedetails"
     t.integer "masterplan2d_id"
+    t.string "imageurl"
     t.index ["masterplan2d_id"], name: "index_phases_on_masterplan2d_id"
   end
 

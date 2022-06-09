@@ -2,7 +2,7 @@ class Masterplan2dsController < ApplicationController
      
   def get
     @compoundmasterdetails=Masterplan2d.find_by_name(params[:compoundmasterplan])
-    @name=@compoundmasterdetails.name
+    @Compoundname=@compoundmasterdetails.name
     @imageurl=@compoundmasterdetails.imageurl
     @imageorignalwidth=@compoundmasterdetails.orginalwidth
     @phases= @compoundmasterdetails.phases
@@ -10,15 +10,18 @@ class Masterplan2dsController < ApplicationController
     @phases.each do |phase|
        @name=phase.name
        @phasedetails=phase.phasedetails
+       @phaseimageurl=phase.imageurl
        @phasedetails.merge!(name:@name)
+       @phasedetails.merge!(phaseimageurl:@phaseimageurl)
        @areas.push(@phasedetails)
     end
     @map={
-      name:@name,
-      areas:@areas
+      name:@Compoundname,
+      areas:@areas,
+
     }
     render json:{
-      name:@name,
+      name:@Compoundname,
       imageurl:@imageurl,
       imageorignalwidth:@imageorignalwidth,
       map:@map
