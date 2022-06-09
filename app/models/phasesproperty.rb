@@ -1,0 +1,6 @@
+class Phasesproperty < ApplicationRecord
+    
+    
+    
+    
+end

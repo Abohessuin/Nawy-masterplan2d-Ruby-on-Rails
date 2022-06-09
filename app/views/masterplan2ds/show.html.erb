@@ -1,0 +1,10 @@
+<p style="color: green"><%= notice %></p>
+
+<%= render @masterplan2d %>
+
+<div>
+  <%= link_to "Edit this masterplan2d", edit_masterplan2d_path(@masterplan2d) %> |
+  <%= link_to "Back to masterplan2ds", masterplan2ds_path %>
+
+  <%= button_to "Destroy this masterplan2d", @masterplan2d, method: :delete %>
+</div>

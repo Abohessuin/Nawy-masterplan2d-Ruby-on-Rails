@@ -1,0 +1,14 @@
+<p style="color: green"><%= notice %></p>
+
+<h1>Masterplan2ds</h1>
+
+<div id="masterplan2ds">
+  <% @masterplan2ds.each do |masterplan2d| %>
+    <%= render masterplan2d %>
+    <p>
+      <%= link_to "Show this masterplan2d", masterplan2d %>
+    </p>
+  <% end %>
+</div>
+
+<%= link_to "New masterplan2d", new_masterplan2d_path %>
