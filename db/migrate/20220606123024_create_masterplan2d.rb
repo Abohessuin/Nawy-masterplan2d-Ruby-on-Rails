@@ -5,5 +5,6 @@ class CreateMasterplan2d < ActiveRecord::Migration[7.0]
       t.string :name
       t.integer :orginalwidth
     end
+    
   end
 end

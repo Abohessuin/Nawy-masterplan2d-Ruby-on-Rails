@@ -134,7 +134,7 @@ GEM
       net-protocol
       timeout
     nio4r (2.5.8)
-    nokogiri (1.13.6-x86_64-linux)
+    nokogiri (1.13.6-x64-mingw32)
       racc (~> 1.4)
     prettier (3.1.2)
       syntax_tree (>= 2.3.1)
@@ -146,6 +146,7 @@ GEM
       nio4r (~> 2.0)
     racc (1.6.0)
     rack (2.2.3.1)
+    rack-cors (0.3.1)
     rack-test (1.1.0)
       rack (>= 1.0, < 3)
     rails (7.0.3)
@@ -165,7 +166,7 @@ GEM
     rails-dom-testing (2.0.3)
       activesupport (>= 4.2.0)
       nokogiri (>= 1.6)
-    rails-html-sanitizer (1.4.2)
+    rails-html-sanitizer (1.4.3)
       loofah (~> 2.3)
     railties (7.0.3)
       actionpack (= 7.0.3)
@@ -221,6 +222,8 @@ GEM
       railties (>= 6.0.0)
     tzinfo (2.0.4)
       concurrent-ruby (~> 1.0)
+    tzinfo-data (1.2022.1)
+      tzinfo (>= 1.0.0)
     web-console (4.2.0)
       actionview (>= 6.0.0)
       activemodel (>= 6.0.0)
@@ -239,7 +242,7 @@ GEM
     zeitwerk (2.5.4)
 
 PLATFORMS
-  x86_64-linux
+  x64-mingw32
 
 DEPENDENCIES
   bootsnap
@@ -250,6 +253,7 @@ DEPENDENCIES
   jbuilder
   prettier
   puma (~> 5.0)
+  rack-cors (~> 0.3.1)
   rails (~> 7.0.3)
   redis (~> 4.0)
   roo (~> 2.9.0)
@@ -263,7 +267,7 @@ DEPENDENCIES
   webdrivers
 
 RUBY VERSION
-   ruby 3.0.0p0
+   ruby 3.0.2p107
 
 BUNDLED WITH
-   2.2.3
+   2.2.22

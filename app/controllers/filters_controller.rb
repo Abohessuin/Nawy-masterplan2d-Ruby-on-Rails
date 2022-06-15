@@ -4,15 +4,31 @@ class FiltersController < ActionController::Base
        @filterres=Set[]
        @filteredvalues=params[:propertytype].split('&')
        @filteredproperties=Phasesproperty.where(propertytype:@filteredvalues)
-       puts(@filterpropertytypex)
-       
        @filteredproperties.each do |property|
            @filterres.add(property.phasename)
        end
+       puts("filteredres",@filterres)
+       @phases=Masterplan2d.find_by_name("owest").phases
+       @areas=[]
+       @phases.each_with_index do |phase,index|
+        @phasestatues=phase.phasedetails['statues']
+        if @phasestatues=="available" && !(@filterres.include? phase.name) && @filterres.length()!=0
+            phase.phasedetails['preFillColor']="rgb(255,58,0,0.1)"
+            phase.phasedetails['fillColor']="rgb(255,58,0,0.4)"
+            phase.phasedetails["strokeColor"]="rgb(255,58,0,1)"
+        end
+        
+        phase.phasedetails.merge!(name:phase.name)
+        phase.phasedetails.merge!(phaseimageurl:phase.imageurl)
+        phase.phasedetails.merge!(number:(index+1))
+        @areas.push(phase.phasedetails)
+       end
        render json:{
-           phasesnames:@filterres
+        map:{
+            :name => "owest",
+            :areas =>@areas
+        }
        }
-       
   
     end
 
