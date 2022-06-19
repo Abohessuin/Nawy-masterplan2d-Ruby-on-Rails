@@ -8,6 +8,7 @@ class LoadController < ActionController::Base
         worksheet.rows.each_with_index do |row,idx|
            if(idx>8)
             row_cells = row.values
+            @unitid=row_cells[3]
             @phasename=row_cells[4].downcase
             @propertytype=row_cells[6].downcase
             @price=row_cells[9]
@@ -15,7 +16,7 @@ class LoadController < ActionController::Base
             @nofbedrooms=row_cells[17]
             @hasgarden=row_cells[11].to_s!=""?true:false
             @hasroof=row_cells[20].to_s!=""?true:false
-            Phasesproperty.create(phasename:@phasename,propertytype:@propertytype,price:@price,area:@area,hasgarden:@hasgarden,nofbedrooms:@nofbedrooms,hasroof:@hasroof)
+            Phasesproperty.create(property_id:@unitid,phasename:@phasename,propertytype:@propertytype,price:@price,area:@area,hasgarden:@hasgarden,nofbedrooms:@nofbedrooms,hasroof:@hasroof)
          end 
        end
     end

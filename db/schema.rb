@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_06_09_111417) do
+ActiveRecord::Schema[7.0].define(version: 2022_06_19_131208) do
   create_table "masterplan2ds", force: :cascade do |t|
     t.string "imageurl"
     t.string "name"
@@ -33,6 +33,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_09_111417) do
     t.boolean "hasgarden"
     t.integer "nofbedrooms"
     t.boolean "hasroof"
+    t.string "property_id"
   end
 
 end
