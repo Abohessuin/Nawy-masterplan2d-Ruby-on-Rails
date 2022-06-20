@@ -45,7 +45,7 @@ class LoadController < ActionController::Base
             data['map']['strokeColor']="rgb(256,256,256,0)"
          end
 
-          Phase.create(name:data['name'],phasedetails:data['map'],masterplan2d_id:1)
+          Phase.create(name:data['name'],phasedetails:data['map'],masterplan2d_id:Masterplan2d.first.id)
       end
       
       
