@@ -51,21 +51,22 @@ jobs:
           proxy_username: ec2-user
           proxy_key: ${{ secrets.AWS_PROD_BASTION_KEY }}
           script: |
-            # source /home/ubuntu/pipeline-env.sh
-            # env
-            # echo $BASH_VERSION
+            source /home/ubuntu/pipeline-env.sh
+            env
+            echo $BASH_VERSION
             echo "cd /var/www/masterplan/"
             cd  "/var/www/masterplan/"
             export GIT_SSH_COMMAND="ssh -i /root/.ssh/masterplan"
             echo "RUN >>>> git checkout ."
-            eval `ssh-agent -s`
-            ssh-agent $(ssh-add /root/.ssh/masterplan; git checkout .)
-            # sudo git checkout .
+            # eval `ssh-agent -s`
+            # ssh-agent $(ssh-add /root/.ssh/masterplan; git checkout .)
+            git checkout .
             echo "RUN >>>> git pull"
-            ssh-agent $(ssh-add /root/.ssh/masterplan; git pull origin main)
-            source /home/ubuntu/pipeline-env.sh
-            env
-            echo $BASH_VERSION
+            git pull origin main
+            # ssh-agent $(ssh-add /root/.ssh/masterplan; git pull origin main)
+            # source /home/ubuntu/pipeline-env.sh
+            # env
+            # echo $BASH_VERSION
             bundle install
             rails db:migrate
             rails restart
