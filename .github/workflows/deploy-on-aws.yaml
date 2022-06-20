@@ -51,7 +51,7 @@ jobs:
           proxy_username: ec2-user
           proxy_key: ${{ secrets.AWS_PROD_BASTION_KEY }}
           script: |
-            source /home/ubuntu/pipeline-env.sh
+            # source /home/ubuntu/pipeline-env.sh
             # env
             # echo $BASH_VERSION
             echo "cd /var/www/masterplan/"
