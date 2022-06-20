@@ -34,7 +34,7 @@ class FiltersController < ActionController::Base
 
 
     def filteredproperties
-
+       
         @filterres
         @check=false
         # if params[:filter_phase][:phasename]
@@ -68,13 +68,14 @@ class FiltersController < ActionController::Base
 
         end
 
-        if params[:filter_phase][:nofbedrooms]
+        if params[:filter_phase][:min_nofbedrooms] &&params[:filter_phase][:max_nofbedrooms]
             if @check
                @filterres=@filterres.where("nofbedrooms>= #{params[:filter_phase][:min_nofbedrooms]} and nofbedrooms <= #{params[:filter_phase][:max_nofbedrooms]}")
             else
                @filterres=Phasesproperty.where("nofbedrooms>= #{params[:filter_phase][:min_nofbedrooms]} and nofbedrooms <= #{params[:filter_phase][:max_nofbedrooms]}")
                @check=true
             end
+        
         end
 
         # if params[:filter_phase][:hasgarden]
@@ -96,7 +97,7 @@ class FiltersController < ActionController::Base
         @filterres=filteredproperties()
         @filteproperties=Set[]
         @phasescounts=Hash[]
-       
+        
         @filterres.each do |property|
             @filteproperties.add(property.phasename)
             if @phasescounts[property.phasename]
@@ -127,7 +128,7 @@ class FiltersController < ActionController::Base
          @areas.push(phase.phasedetails)
         end
 
-
+      
         render json:{
          map:{
              :name => "owest",
