@@ -63,6 +63,9 @@ jobs:
             # sudo git checkout .
             echo "RUN >>>> git pull"
             ssh-agent $(ssh-add /root/.ssh/masterplan; git pull origin main)
+            source /home/ubuntu/pipeline-env.sh
+            env
+            echo $BASH_VERSION
             bundle install
             rails db:migrate
             rails restart
