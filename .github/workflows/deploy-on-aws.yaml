@@ -58,9 +58,9 @@ jobs:
             cd  "/var/www/masterplan/"
             export GIT_SSH_COMMAND="ssh -i /root/.ssh/masterplan"
             echo "RUN >>>> git checkout ."
-            git checkout .
+            sudo -i git checkout .
             echo "RUN >>>> git pull"
-            git pull origin main
+            sudo -i git pull origin main
             bundle install
             rails db:migrate
             rails restart
