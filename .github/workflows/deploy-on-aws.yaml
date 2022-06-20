@@ -1,0 +1,112 @@
+name: Deploy master-plan backend on AWS envrionment
+
+on:
+  push:
+    branches: ["main"]
+
+jobs:      
+  deploy-crm-rails:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build started - slack message
+        id: slack_started
+        uses: slackapi/slack-github-action@v1.18.0
+        with:
+          # Slack channel id, channel name, or user id to post message.
+          # See also: https://api.slack.com/methods/chat.postMessage#channels
+          channel-id: 'team_website_deployments'
+          # For posting a simple plain text message
+          payload: |
+            {
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": ":ghost: Detected a new change on *master-plan* and *action: deploy-on-aws* has triggered by :bowtie: *${{ github.actor }}* on branch *${{ github.ref }}*  .. \n*Links:* (<${{ github.event.pull_request.html_url || github.event.head_commit.url }}|diff>, <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|job logs>)"
+                  }
+                }
+              ]
+            }
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+      - name: executing remote ssh commands using password on AWS Master Plan
+        #env:
+          # PATH: "/root/.nvm/versions/node/v6.17.1/bin:/usr/local/rvm/gems/ruby-2.6.1/bin:/usr/local/rvm/gems/ruby-2.6.1@global/bin:/usr/local/rvm/rubies/ruby-2.6.1/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin:/usr/local/rvm/bin"
+          # MY_RUBY_HOME: "/usr/local/rvm/rubies/ruby-2.6.1"
+          # RUBY_VERSION: "ruby-2.6.1"
+          # rvm_bin_path: "/usr/local/rvm/bin"
+          # GEM_PATH: "/usr/local/rvm/gems/ruby-2.6.1:/usr/local/rvm/gems/ruby-2.6.1@global"
+          # GEM_HOME: "/usr/local/rvm/gems/ruby-2.6.1"
+          # rvm_path: "/usr/local/rvm"
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.AWS_MASTER_PLAN }}
+          username: root
+          key: ${{ secrets.AWS_MASTER_PLAN_KEY}}
+          port: 22
+          # envs: PATH,MY_RUBY_HOME,RUBY_VERSION,rvm_bin_path,GEM_PATH,GEM_HOME,rvm_path
+          proxy_host: ${{ secrets.AWS_PROD_BASTION_HOST }}
+          proxy_port: 22
+          proxy_username: ec2-user
+          proxy_key: ${{ secrets.AWS_PROD_BASTION_KEY }}
+          script: |
+            source /home/ubuntu/pipeline-env.sh
+            env
+            echo $BASH_VERSION
+            echo "cd /var/www/masterplan/"
+            cd  "/var/www/masterplan/"
+            export GIT_SSH_COMMAND="ssh -i /root/.ssh/masterplan"
+            echo "RUN >>>> git checkout ."
+            git checkout .
+            echo "RUN >>>> git pull"
+            git pull origin main
+            bundle install
+            rails db:migrate
+
+      - name: slack success message
+        id: slack_success
+        if: ${{ success() }}
+        uses: slackapi/slack-github-action@v1.18.0
+        with:
+          # Slack channel id, channel name, or user id to post message.
+          # See also: https://api.slack.com/methods/chat.postMessage#channels
+          channel-id: 'team_website_deployments'
+          # For posting a simple plain text message
+          payload: |
+            {
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": ":white_check_mark: Deployment on *master-plan* for *action: deploy-on-aws* has succeeded which was triggered by :bowtie: *${{ github.actor }}* on branch *${{ github.ref }}*  .. \n*Links:* (<${{ github.event.pull_request.html_url || github.event.head_commit.url }}|diff>, <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|job logs>)"
+                  }
+                }
+              ]
+            }
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+      - name: slack failure message
+        id: slack_failure
+        if: ${{ failure() }}
+        uses: slackapi/slack-github-action@v1.18.0
+        with:
+          # Slack channel id, channel name, or user id to post message.
+          # See also: https://api.slack.com/methods/chat.postMessage#channels
+          channel-id: 'team_website_deployments'
+          # For posting a simple plain text message
+          payload: |
+            {
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": ":x: Deployment on *master-plan* for *action: deploy-on-aws* has *failed. Please check the logs.* This build was triggered by :bowtie: *${{ github.actor }}* on branch *${{ github.ref }}*  .. \n*Links:* (<${{ github.event.pull_request.html_url || github.event.head_commit.url }}|diff>, <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|job logs>)"
+                  }
+                }
+              ]
+            }
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
