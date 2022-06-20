@@ -58,12 +58,13 @@ jobs:
             cd  "/var/www/masterplan/"
             export GIT_SSH_COMMAND="ssh -i /root/.ssh/masterplan"
             echo "RUN >>>> git checkout ."
-            sudo git checkout .
+            ssh-agent $(ssh-add /root/.ssh/masterplan; git checkout .)
+            # sudo git checkout .
             echo "RUN >>>> git pull"
-            sudo git pull origin main
-            bundle install
-            rails db:migrate
-            rails restart
+            ssh-agent $(ssh-add /root/.ssh/masterplan; git pull origin main)
+            sudo bundle install
+            sudo rails db:migrate
+            sudo rails restart
 
       - name: slack success message
         id: slack_success
