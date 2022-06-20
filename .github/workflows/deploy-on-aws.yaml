@@ -63,7 +63,7 @@ jobs:
             git pull origin main
             bundle install
             rails db:migrate
-            rails server
+            rails restart
 
       - name: slack success message
         id: slack_success
