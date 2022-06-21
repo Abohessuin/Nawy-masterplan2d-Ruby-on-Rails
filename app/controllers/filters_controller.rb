@@ -37,9 +37,14 @@ class FiltersController < ActionController::Base
        
         @filterres
         @check=false
-        # if params[:filter_phase][:phasename]
-        #   @filterres=Phasesproperty.where(phasename:params[:filter_phase][:phasename])
-        # end
+         if params[:filter_phase][:phasename]
+            if @check
+               @filterres=@filterres.where(phasename:params[:filter_phase][:phasename])
+            else
+            end
+           @filterres=Phasesproperty.where(phasename:params[:filter_phase][:phasename])
+           @check=true
+         end
         if params[:filter_phase][:propertytype]
             if @check
                 @filterres=@filterres.where(propertytype: params[:filter_phase][:propertytype])
