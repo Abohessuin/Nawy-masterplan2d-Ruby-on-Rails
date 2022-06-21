@@ -94,8 +94,17 @@ class FiltersController < ActionController::Base
     end
 
     def filter_phase_3d
+        @propertiesIDs=[];
         @filterres=filteredproperties()
-        render json: @filterres
+        
+        @filterres.each do |filter|
+            @propertiesIDs.push(filter.property_id)
+        end
+        
+        render json:{
+            :propertiesids=>@propertiesIDs,
+            :properties=>@filterres
+        }
     end
 
     def filter_phase_2d
