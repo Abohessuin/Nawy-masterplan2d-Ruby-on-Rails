@@ -69,7 +69,7 @@ jobs:
             # echo $BASH_VERSION
             bundle install
             rails db:migrate
-            rails restart
+            supervisorctl restart masterplan
 
       - name: slack success message
         id: slack_success
