@@ -111,7 +111,11 @@ class FiltersController < ActionController::Base
         @filterres=filteredproperties()
         @filteproperties=Set[]
         @phasescounts=Hash[]
-        
+        @propertiesIDs=[];
+
+        @filterres.each do |filter|
+            @propertiesIDs.push(filter.property_id)
+        end
         @filterres.each do |property|
             @filteproperties.add(property.phasename)
             if @phasescounts[property.phasename]
@@ -124,14 +128,15 @@ class FiltersController < ActionController::Base
       
         @phases=Masterplan2d.find_by_name("owest").phases
         @areas=[]
+        puts("alooooo",@filterres)
         @phases.each_with_index do |phase,index|
          @phasestatues=phase.phasedetails['statues']
-         if @phasestatues=="available" && !(@filteproperties.include? phase.name) && @filteproperties.length()!=0
+         if @phasestatues=="available" && !(@filteproperties.include? phase.name) 
              phase.phasedetails['preFillColor']="rgb(255,58,0,0.1)"
              phase.phasedetails['fillColor']="rgb(255,58,0,0.4)"
              phase.phasedetails["strokeColor"]="rgb(255,58,0,1)"
          end
-         phase.phasedetails.merge!(name:phase.name)
+         phase.phasedetails.merge!(name:phase.name) 
          phase.phasedetails.merge!(phaseimageurl:phase.imageurl)
          phase.phasedetails.merge!(number:(index+1))
          if @phasescounts[phase.name]
@@ -148,6 +153,7 @@ class FiltersController < ActionController::Base
              :name => "owest",
              :areas =>@areas
          },
+         propertiesfiltered:@propertiesIDs
         
         }
 
