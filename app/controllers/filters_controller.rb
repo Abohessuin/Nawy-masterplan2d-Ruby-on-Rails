@@ -96,7 +96,7 @@ class FiltersController < ActionController::Base
     def filter_phase_3d
         @propertiesIDs=[];
         @filterres=filteredproperties()
-        
+        puts("alloooo",@filterres)
         @filterres.each do |filter|
             @propertiesIDs.push(filter.property_id)
         end
