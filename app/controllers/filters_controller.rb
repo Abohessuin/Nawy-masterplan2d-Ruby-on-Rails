@@ -45,7 +45,7 @@ class FiltersController < ActionController::Base
            @filterres=Phasesproperty.where(phasename:params[:filter_phase][:phasename])
            @check=true
          end
-         if params[:filter_phase][:propertytype] && params[:filter_phase][:propertytype] != "-1"
+         if params[:filter_phase][:propertytype] && params[:filter_phase][:propertytype] !="-1"
             if @check
                 @filterres=@filterres.where(propertytype: params[:filter_phase][:propertytype])
             else
@@ -80,7 +80,6 @@ class FiltersController < ActionController::Base
                @filterres=Phasesproperty.where("nofbedrooms>= #{params[:filter_phase][:min_nofbedrooms]} and nofbedrooms <= #{params[:filter_phase][:max_nofbedrooms]}")
                @check=true
             end
-        puts("klammmmmmmmmmmmmmm",@filterres)
         end
 
         # if params[:filter_phase][:hasgarden]
@@ -108,12 +107,14 @@ class FiltersController < ActionController::Base
     end
 
     def filter_phase_2d
+        @filterres=[];
         @filterres=filteredproperties()
         @filteproperties=Set[]
         @phasescounts=Hash[]
         @propertiesIDs=[];
         puts("alooooo000000000000000",@filterres)
         @filterres.each do |filter|
+            puts("alooooo000000000000000",@filterres)
             @propertiesIDs.push(filter.property_id)
         end
         @filterres.each do |property|
