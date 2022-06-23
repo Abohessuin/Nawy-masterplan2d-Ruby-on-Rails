@@ -45,7 +45,7 @@ class FiltersController < ActionController::Base
            @filterres=Phasesproperty.where(phasename:params[:filter_phase][:phasename])
            @check=true
          end
-        if params[:filter_phase][:propertytype]
+         if params[:filter_phase][:propertytype] && params[:filter_phase][:propertytype] != "-1"
             if @check
                 @filterres=@filterres.where(propertytype: params[:filter_phase][:propertytype])
             else
@@ -73,14 +73,14 @@ class FiltersController < ActionController::Base
 
         end
 
-        if params[:filter_phase][:min_nofbedrooms] &&params[:filter_phase][:max_nofbedrooms]
+        if params[:filter_phase][:min_nofbedrooms] &&params[:filter_phase][:max_nofbedrooms] && params[:filter_phase][:min_nofbedrooms]!="-1"
             if @check
-               @filterres=@filterres.where("nofbedrooms>= #{params[:filter_phase][:min_nofbedrooms]} and nofbedrooms <= #{params[:filter_phase][:max_nofbedrooms]}")
+               @filterres=@filterres.where("nofbedrooms>= #{params[:filter_phase][:min_nofbedrooms].to_i} and nofbedrooms <= #{params[:filter_phase][:max_nofbedrooms]}")
             else
                @filterres=Phasesproperty.where("nofbedrooms>= #{params[:filter_phase][:min_nofbedrooms]} and nofbedrooms <= #{params[:filter_phase][:max_nofbedrooms]}")
                @check=true
             end
-        
+        puts("klammmmmmmmmmmmmmm",@filterres)
         end
 
         # if params[:filter_phase][:hasgarden]
@@ -96,11 +96,11 @@ class FiltersController < ActionController::Base
     def filter_phase_3d
         @propertiesIDs=[];
         @filterres=filteredproperties()
-        puts("alloooo",@filterres)
+         
         @filterres.each do |filter|
             @propertiesIDs.push(filter.property_id)
         end
-        
+        puts(@filterres)
         render json:{
             :propertiesids=>@propertiesIDs,
             :properties=>@filterres
@@ -112,7 +112,7 @@ class FiltersController < ActionController::Base
         @filteproperties=Set[]
         @phasescounts=Hash[]
         @propertiesIDs=[];
-
+        puts("alooooo000000000000000",@filterres)
         @filterres.each do |filter|
             @propertiesIDs.push(filter.property_id)
         end
@@ -128,10 +128,9 @@ class FiltersController < ActionController::Base
       
         @phases=Masterplan2d.find_by_name("owest").phases
         @areas=[]
-        puts("alooooo",@filterres)
         @phases.each_with_index do |phase,index|
          @phasestatues=phase.phasedetails['statues']
-         if @phasestatues=="available" && !(@filteproperties.include? phase.name) 
+         if @phasestatues=="available" && !(@filteproperties.include? phase.name)  && @filteproperties.length!=0
              phase.phasedetails['preFillColor']="rgb(255,58,0,0.1)"
              phase.phasedetails['fillColor']="rgb(255,58,0,0.4)"
              phase.phasedetails["strokeColor"]="rgb(255,58,0,1)"
